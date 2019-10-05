@@ -11,14 +11,30 @@ class ConfirmRoute extends Component{
     redirectToSearch: false
   }
 
-  render(){
-    const { redirectToResults } = this.state;
-    const { redirectToSearch } = this.state;
-      if(redirectToResults) {
-        return <Redirect to="/results"/>
-    } else if (redirectToSearch) {
-      return <Redirect to='/'/>
-    }
+handleRedirect = async (e) => {
+  e.preventDefault()
+  await this.props.actions.fetchUberEstimate(this.props.startLat, this.props.startLng, this.props.destinationLat, this.props.destinationLng)
+  await this.props.actions.fetchLyftEstimate(this.props.startLat, this.props.startLng, this.props.destinationLat, this.props.destinationLng)
+  this.setState({
+    redirectToResults: true
+  })
+}
+
+handleRedirectBack = () => {
+  this.setState({
+    redirectToSearch: true
+  })
+}
+
+
+render(){
+  const { redirectToResults } = this.state;
+  const { redirectToSearch } = this.state;
+    if(redirectToResults) {
+      return <Redirect to="/results"/>
+  } else if (redirectToSearch) {
+    return <Redirect to='/'/>
+  }
 
   return(
     <div>
